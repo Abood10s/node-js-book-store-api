@@ -1,5 +1,6 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
+const helmet = require("helmet");
+const cors = require("cors");
 
 const logger = require("./middlewares/logger");
 const { notFound, errorHandler } = require("./middlewares/errors");
@@ -26,6 +27,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(logger);
+//Helmet adds headers to our app make it more secure
+app.use(helmet());
+//cors policy solves cross origin issues from react or front end local hosts
+// here only http://localhost:3000 this can deal and access the api
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//   })
+// );
+//all domains here can access the api
+app.use(cors());
 // lets express know what view engine you use to render html to client ejs or pug
 app.set("view engine", "ejs");
 
