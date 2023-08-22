@@ -22,6 +22,9 @@ connectToDb();
 // Law: if you don't give response you should use next() if you send res no need for next or following middle wares and routes won't work
 // الترتيب  مهم بال middlewares
 app.use(express.json());
+//this gets the data coming from the view "reset password form in our case" from post method sending form data
+app.use(express.urlencoded({ extended: false }));
+
 app.use(logger);
 // lets express know what view engine you use to render html to client ejs or pug
 app.set("view engine", "ejs");
