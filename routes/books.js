@@ -17,16 +17,22 @@ const { verifyTokenAndAdmin } = require("../middlewares/verifytoken");
  * @method GET
  * @access public
  */
+// populate gets the author object is the response attached with each book
+// second parameter for populate only gets specific columns
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const books = await Book.find().populate("author", [
-      "id",
-      "firstName",
-      "lastName",
-    ]);
-    // populate gets the author object is the response attached with each book
-    // second parameter for populate only gets specific columns
+    const { minPrice, maxPrice } = req.query;
+    let books;
+    if (minPrice && maxPrice) {
+      books = await Book.find({
+        price: { $gte: minPrice, $lte: maxPrice },
+      }).populate("author", ["id", "firstName", "lastName"]);
+    } else {
+      books = await Book.find()
+        .sort({ price: 1 })
+        .populate("author", ["id", "firstName", "lastName"]);
+    }
     res.status(200).json(books);
   })
 );

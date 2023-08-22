@@ -1,5 +1,7 @@
 const { Book } = require("./models/Book");
-const { books } = require("./data");
+const { Author } = require("./models/Author");
+
+const { books, authors } = require("./data");
 const connectToDb = require("./config/db");
 require("dotenv").config();
 //this file is dependent from our project so we import all things and connection
@@ -21,7 +23,19 @@ const importBooks = async () => {
     process.exit(1);
   }
 };
+//import Books
 
+const importAuthors = async () => {
+  try {
+    //insertMany only takes array
+    await Author.insertMany(authors);
+    console.log("authors imported");
+  } catch (error) {
+    console.log(error);
+    // cuts connection to the database process.exit(1)
+    process.exit(1);
+  }
+};
 //Delete All Books from Book table
 const DeleteBooks = async () => {
   try {
@@ -39,4 +53,6 @@ if (process.argv[2] === "-import") {
   importBooks();
 } else if (process.argv[2] === "-remove") {
   DeleteBooks();
+} else if (process.argv[2] === "import-authors") {
+  importAuthors();
 }

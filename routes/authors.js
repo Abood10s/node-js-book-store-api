@@ -21,7 +21,15 @@ router.get(
     // find({}) => gets All in the database // sort 1=>true ,-1 reverse
     // select => gets only 2 columns firstName and lastName
     // in select - "minus" and column with no space after it removes the column from the response
-    const authorList = await Author.find({});
+    // skip(2) skip the first 2 records and get the third and fourth
+    //limit how many records you want in response after skipping "per page"
+    let { pageNo, perPage } = req.query;
+    if (parseInt(perPage) <= 0) {
+      perPage = 2;
+    }
+    const authorList = await Author.find({})
+      .skip((pageNo - 1) * perPage)
+      .limit(perPage);
     // .sort({ firstName: 1 })
     // .select("firstName lastName -_id");
     res.status(200).json(authorList);
