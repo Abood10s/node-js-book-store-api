@@ -13,8 +13,6 @@ connectToDb();
 
 //عشان الداتا اللي جاية من الفرونت بالفورم يفهمها الexpress لانها مبعوتة json
 //بدونها بتقدرش تخزن حاجة جاية منPOST
-app.use(express.json());
-
 //=========================
 // this app contains the 4 methods "verbs" get,post,put,delete
 //app.get("route",routehandler(req,res))
@@ -23,12 +21,17 @@ app.use(express.json());
 // middleware something has err,req,res,next and callback function written in app.use
 // Law: if you don't give response you should use next() if you send res no need for next or following middle wares and routes won't work
 // الترتيب  مهم بال middlewares
+app.use(express.json());
 app.use(logger);
+// lets express know what view engine you use to render html to client ejs or pug
+app.set("view engine", "ejs");
+
 // ROUTES
 app.use("/api/books", require("./routes/books"));
 app.use("/api/authors", require("./routes/authors"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/users", require("./routes/users"));
+app.use("/password", require("./routes/password"));
 
 //we should write errorhandler middleware after routes الترتيب مهم
 // middle ware have err also
